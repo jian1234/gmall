@@ -30,7 +30,7 @@ public class GmallManageWebApplicationTests {
         //h获得trackerserver实例
         TrackerServer trackerServer = trackerClient.getTrackerServer();
         StorageClient storageClient = new StorageClient(trackerServer,null);
-        String tp = "";
+        String tp = "f:/1.jpg";
         String[] upload_file = storageClient.upload_file(tp,"jpg",null);
         for (int i = 0; i < upload_file.length; i++) {
             String s = upload_file[i];
