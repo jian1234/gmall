@@ -9,9 +9,9 @@
         <relativePath>../gmall-parent/pom.xml</relativePath>
     </parent>
     <groupId>com.atguigu.gmall</groupId>
-    <artifactId>gmall-user-service</artifactId>
+    <artifactId>gmall-manage-web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>gmall-user-service</name>
+    <name>gmall-manage-web</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -21,15 +21,22 @@
     <dependencies>
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
-            <artifactId>gmall-service-util</artifactId>
+            <artifactId>gmall-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
-            <artifactId>gmall-api</artifactId>
+            <artifactId>gmall-web-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.csource</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>1.27-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

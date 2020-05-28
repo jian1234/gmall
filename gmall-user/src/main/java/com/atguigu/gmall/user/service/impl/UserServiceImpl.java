@@ -5,8 +5,8 @@ import com.atguigu.gmall.bean.UmsMember;
 import com.atguigu.gmall.bean.UmsMemberReceiveAddress;
 
 import com.atguigu.gmall.user.mapper.UmsMemberReceiveAddressMapper;
-import com.atguigu.gmall.user.mapper.UserMapper;
 import com.atguigu.gmall.serivce.UserService;
+import com.atguigu.gmall.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserMapper userMapper;
+   @Autowired
+   private UserMapper userMapper;
 
-    @Autowired
-    UmsMemberReceiveAddressMapper umsMemberReceiveAddressMapper;
+   @Autowired
+   private UmsMemberReceiveAddressMapper umsMemberReceiveAddressMapper;
 
     @Override
     public List<UmsMember> getAllUser() {
