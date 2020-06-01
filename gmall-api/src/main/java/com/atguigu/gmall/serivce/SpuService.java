@@ -7,4 +7,7 @@ import java.util.List;
 public interface SpuService {
 
     List<PmsProductInfo> spuList(String catalog3Id);
+
+    // 保存spu 信息
+    public void saveSpuInfo(PmsProductInfo pmsProductInfo);
 }
