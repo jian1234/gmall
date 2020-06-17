@@ -9,7 +9,7 @@ import java.io.IOException;
 public class PmsUploadUtil {
     public static String uploadImage(MultipartFile multipartFile){
         // 图片服务器地址
-        String imgUrl = "http://199.66.62.229";
+        String imgUrl = "http://192.168.42.237";
         // 获取fdfs配置文件地址
         String tracker = PmsUploadUtil.class.getResource("/tracker.conf").getPath();
         try {
