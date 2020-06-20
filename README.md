@@ -9,3 +9,6 @@ gmall-manage-service  8084  --后台管理服务
 
 #gmall-item-service 前台商品详情服务 9091
 gmall-item-web 前台商品详情展示 9090
+
+#gmall-search-web 全文检索 10001
+gmall-search-search 10002
