@@ -13,6 +13,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TemplateQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -45,15 +47,17 @@ public class SearchServiceImpl implements SearchService {
         for (SearchResult.Hit<PmsSearchSkuInfo,Void> hit : hits){
             PmsSearchSkuInfo source = hit.source;
             Map<String,List<String>> highlight = hit.highlight;
-            String skuName = highlight.get("skuName").get(0);
-            source.setSkuName(skuName);
+            if(highlight != null){
+                String skuName = highlight.get("skuName").get(0);
+                source.setSkuName(skuName);
+            }
             pmsSearchSkuInfos.add(source);
         }
         return pmsSearchSkuInfos;
     }
 
     private String getSearchDsl(PmsSearchParam pmsSearchParam){
-        List<PmsSkuAttrValue> skuAttrValueList = pmsSearchParam.getSkuAttrValueList();
+        String[] skuAttrValueList = pmsSearchParam.getValueId();
         String keyword = pmsSearchParam.getKeyword();
         String catalog3Id = pmsSearchParam.getCatalog3Id();
 
@@ -64,8 +68,8 @@ public class SearchServiceImpl implements SearchService {
             boolQueryBuilder.filter(termQueryBuilder);
         }
         if (skuAttrValueList!=null){
-            for (PmsSkuAttrValue pmSkuAttrValue: skuAttrValueList) {
-                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId",pmSkuAttrValue.getValueId());
+            for (String pmSkuAttrValue: skuAttrValueList) {
+                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId",pmSkuAttrValue);
                 boolQueryBuilder.filter(termQueryBuilder);
             }
         }
@@ -88,6 +92,10 @@ public class SearchServiceImpl implements SearchService {
         searchSourceBuilder.from(0);
         //size
         searchSourceBuilder.size(20);
+
+        // aggs
+        TermsBuilder groupby_attr = AggregationBuilders.terms("groupby_attr").field("skuAttrValueList.valueId");
+        searchSourceBuilder.aggregation(groupby_attr);
         return searchSourceBuilder.toString();
     }
 }
