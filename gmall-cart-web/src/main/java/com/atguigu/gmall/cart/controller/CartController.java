@@ -9,11 +9,15 @@ import com.atguigu.gmall.serivce.SkuService;
 import com.atguigu.gmall.util.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,45 @@ public class CartController {
     SkuService skuService;
     @Reference
     CartService cartService;
+
+    @RequestMapping("cartList")
+    public String cartList(String skuId, int quantity, HttpServletRequest request, HttpServletResponse respose, HttpSession session, ModelMap modelMap){
+        List<OmsCartItem> omsCartItems = new ArrayList<>();
+        String userId="";
+        if (StringUtils.isNotBlank(userId)){
+            // 已经登录
+            omsCartItems = cartService.cartList(userId);
+        }else{
+            // 未登录
+            String cartListCookie = CookieUtil.getCookieValue(request,"cartListCookie",true);
+            if (StringUtils.isNotBlank(cartListCookie)){
+                omsCartItems = JSON.parseArray(cartListCookie,OmsCartItem.class);
+            }
+        }
+        for (OmsCartItem omsCartItem : omsCartItems){
+            omsCartItem.setTotalPrice(omsCartItem.getTotalPrice());
+            omsCartItem.getQuantity();
+        }
+        modelMap.put("cartList",omsCartItems);
+        // 被勾选商品的总额
+        BigDecimal totalAmount =getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount",totalAmount);
+        return "cartList";
+    }
+
+    private BigDecimal getTotalAmount(List<OmsCartItem> omsCartItems) {
+        BigDecimal totalAmount = new BigDecimal("0");
+
+        for (OmsCartItem omsCartItem : omsCartItems) {
+            BigDecimal totalPrice = omsCartItem.getTotalPrice();
+
+            if(omsCartItem.getIsChecked().equals("1")){
+                totalAmount = totalAmount.add(totalPrice);
+            }
+        }
+
+        return totalAmount;
+    }
 
     @RequestMapping("addToCart")
     public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse respose){
@@ -104,6 +147,19 @@ public class CartController {
                 b = true;
             }
         }
+        DateFormat df1 = new SimpleDateFormat("yyyyMMdd");
+
         return b;
+    }
+
+    public static void main(String[] args) throws Exception{
+        String dateToparse1="2005-06-09 10:10:10";
+        String dateToparse2="2005-06-09 10:10:10";
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(dateToparse1);
+        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(dateToparse2);
+        String now1 = new SimpleDateFormat("yyyyMMdd").format(date1);
+        String now2 = new SimpleDateFormat("yyyyMM").format(date2);
+        System.out.println(now1);
+        System.out.println(now2);
     }
 }
