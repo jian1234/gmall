@@ -12,3 +12,9 @@ gmall-item-web 前台商品详情展示 9090
 
 #gmall-search-web 全文检索 10001
 gmall-search-search 10002
+
+#gmall-cart-web 购物车  10003
+gmall-cart-service  10004
+
+#gmall-passport-web 用户认证中心
+gmall-user

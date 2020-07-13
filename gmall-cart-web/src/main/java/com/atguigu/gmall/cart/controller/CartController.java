@@ -2,6 +2,7 @@ package com.atguigu.gmall.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.atguigu.gmall.annotation.LoginRequired;
 import com.atguigu.gmall.bean.OmsCartItem;
 import com.atguigu.gmall.bean.PmsSkuInfo;
 import com.atguigu.gmall.serivce.CartService;
@@ -30,8 +31,32 @@ public class CartController {
     @Reference
     CartService cartService;
 
+    @RequestMapping("checkCart")
+    @LoginRequired(loginSuccess = false)
+    public String checkCart(String isChecked,String skuId,HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+
+        String memberId = (String)request.getAttribute("memberId");
+        String nickname = (String)request.getAttribute("nickname");
+
+        // 调用服务，修改状态
+        OmsCartItem omsCartItem = new OmsCartItem();
+        omsCartItem.setMemberId(memberId);
+        omsCartItem.setProductSkuId(skuId);
+        omsCartItem.setIsChecked(isChecked);
+        cartService.checkCart(omsCartItem);
+
+        // 将最新的数据从缓存中查出，渲染给内嵌页
+        List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
+        modelMap.put("cartList",omsCartItems);
+
+        // 被勾选商品的总额
+        BigDecimal totalAmount =getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount",totalAmount);
+        return "cartListInner";
+    }
+
     @RequestMapping("cartList")
-    public String cartList(String skuId, int quantity, HttpServletRequest request, HttpServletResponse respose, HttpSession session, ModelMap modelMap){
+    public String cartList(HttpServletRequest request, HttpServletResponse respose, HttpSession session, ModelMap modelMap){
         List<OmsCartItem> omsCartItems = new ArrayList<>();
         String userId="";
         if (StringUtils.isNotBlank(userId)){
