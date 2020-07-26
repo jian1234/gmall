@@ -16,5 +16,8 @@ gmall-search-search 10002
 #gmall-cart-web 购物车  10003
 gmall-cart-service  10004
 
-#gmall-passport-web 用户认证中心
-gmall-user
+#gmall-passport-web 用户认证中心 10005
+gmall-user-service
+
+#gmall-order-web 订单 10006
+gmall-order-service 10007 
