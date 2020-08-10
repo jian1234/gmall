@@ -20,4 +20,6 @@ gmall-cart-service  10004
 gmall-user-service
 
 #gmall-order-web 订单 10006
-gmall-order-service 10007 
+gmall-order-service 10007
+
+#gmall-payment 支付 10008

@@ -115,7 +115,7 @@ public class OrderController {
             // 删除购物车的对应商品
             orderService.saveOrder(omsOrder);
             //重定向到支付页面
-            ModelAndView mv = new ModelAndView("redirect:http://payment.gmall.com:8087/index");
+            ModelAndView mv = new ModelAndView("redirect:http://127.0.0.1:10008/index");
             mv.addObject("outTradeNo",outTradeNo);
             mv.addObject("totalAmount",totalAmount);
             return mv;
