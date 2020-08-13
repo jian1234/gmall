@@ -23,3 +23,7 @@ gmall-user-service
 gmall-order-service 10007
 
 #gmall-payment 支付 10008
+
+
+activeMQ消息队列
+http://localhost:8161
